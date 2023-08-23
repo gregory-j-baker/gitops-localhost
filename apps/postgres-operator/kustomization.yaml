@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: postgres-operator
+commonLabels:
+  app.kubernetes.io/name: pgo
+  app.kubernetes.io/version: 5.4.1 # should match the version in postgres-operator.crunchydata.com_postgresclusters.yaml
+  postgres-operator.crunchydata.com/control-plane: postgres-operator
+images:
+  - name: postgres-operator
+    newName: registry.developers.crunchydata.com/crunchydata/postgres-operator
+    newTag: ubi8-5.4.1-0
+patchesJson6902:
+  - target: { group: apps, version: v1, kind: Deployment, name: pgo }
+    # source: https://github.com/CrunchyData/postgres-operator-examples/tree/main/kustomize/install/default/
+    path: selectors.yaml
+resources:
+  - ./namespace.yaml
+  # source: https://github.com/CrunchyData/postgres-operator-examples/tree/main/kustomize/install/crd/bases/
+  - ./postgres-operator.crunchydata.com_pgupgrades.yaml
+  - ./postgres-operator.crunchydata.com_postgresclusters.yaml
+  # source: https://github.com/CrunchyData/postgres-operator-examples/tree/main/kustomize/install/manager/
+  - ./manager.yaml
+  # source: https://github.com/CrunchyData/postgres-operator-examples/tree/main/kustomize/install/rbac/cluster/
+  - ./role_binding.yaml
+  - ./role.yaml
+  - ./service_account.yaml
