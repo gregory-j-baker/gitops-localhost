@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  default.conf: |
+    server {
+      listen 80;
+      server_name _; # catch all server name
+      rewrite ^ http://hello-world.local.computer$request_uri? permanent;
+    }
