@@ -1,0 +1,6 @@
+{
+  "destServers": [
+    { "destServer": "https://kubernetes.default.svc" },
+    { "destServer": "https://kubernetes.example.com" }
+  ]
+}
